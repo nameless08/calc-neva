@@ -1,0 +1,295 @@
+<!doctype html>
+<html class="no-js" lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Мелочи</title>
+    <meta name="description" content='<?echo $descr_page;?>' />
+    <meta name="keywords" content='<?echo $keywords_page;?>' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+ <!--    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> -->
+
+    <link rel="stylesheet" href="pub/css/base.css">
+    <link rel="stylesheet" href="pub/css/main.css">
+    <!-- <link rel="stylesheet" href="pub/grid.css"> -->
+   
+    <script src="pub/js/modernizr-2.8.3.min.js"></script>
+
+   
+    	
+     
+
+</head>
+
+<body>
+
+
+
+
+
+<div class="calc">
+	
+	<form action="" class="calc__form" id="calcForm">
+		
+		<div class="legal-form">
+			<label for="">Диаметр колеса, мм:</label> 	
+			<select id="wheelDiameter" name="">
+				<option selected>800</option>
+	  			<option>1000</option>
+	  			<option>1600</option>
+	  			<option>1800</option>
+	  			<option>2250</option>
+	  			<option>2500</option>
+	  			<option>2700</option>
+	  			<option>2800</option>
+	  			<option>5000</option>	
+			</select>
+    	</div><!-- /legal-form -->
+   		
+   		<div class="tax-system">
+   			<label for="">Расход воздуха, м<sup>3</sup>/c:</label> 	
+   			<input type="text" disabled="true" value="До 6">
+		</div><!-- /tax-system -->
+
+		<div class="type-activity">
+			<label for="">Вид деятельности:</label>
+			<select id="typeActivity">
+	  			<option value="act1">Торговля</option>
+	  			<option value="act2">Производство</option>
+				<option value="act3">Услуги</option>
+				<option value="act4">Прочее</option>
+			</select>
+		</div><!-- /type-activity -->
+
+		<div class="cash-registers">
+			<label for="">Количество кассовых аппаратов:</label><input id="cashRegisters" type="number" value="0">
+		</div><!-- /cash-registers -->
+
+		<div class="number-staff">
+			<label for="">Количество сотрудников:</label><input id="numberStaff" type="number" value="0">
+		</div><!-- /number-staff -->
+
+		<div class="number-payment">
+			<label for="">Количество платежных поручений в месяц по банку (вх. и исх.):</label><input id="numberPayment" type="number" value="0">
+		</div><!-- /number-payment  -->
+
+		<div class="calc__output-screen">Стоимость услуг: <span></span></div><!-- /output-screen -->
+		<div class="calc__note"><span>Примечание:</span> данный расчет приблизительный и не учитывает индивидуальные особенности, например наличие экспорта, ВЭД, иностранного капитала и т.д. Для более детального расчета <a href="#" title="">оставьте заявку</a> и мы с Вами свяжемся.</div>
+
+		<div id="makeCalculations" class="btn-calc">Произвести расчет</div>
+
+	</form>
+
+
+	
+	
+
+</div><!-- /calc -->
+
+
+
+
+
+	<script src="pub/js/jquery-1.11.2.min.js"></script>
+	<script src="pub/js/jquery-migrate-1.2.1.min.js"></script>
+	
+	<script>
+		
+		'use strict';
+		
+		(function($, undefined){ 
+
+			var optionsAirCond = {
+				
+				wheel : getEl('#wheelDiameter').options,
+
+				flow : [ 'До 6', 'До 7', 'До 23', 'До 25', 'До 45', 'До 50', 'До 60', 'До 70', 'До 200' ],
+
+				pressure : [
+
+					['До 350', '350 – 400'],
+					['До 300', '300 – 350'],
+					['До 300', '300 – 450', '450 – 530'],
+					['До 190', '190 – 260', '260 – 310'],
+					['До 250', '250 – 340', '340 – 420'],
+					['До 280', '280 – 400', '400 – 500'],
+					['До 230', '230 – 320', '320 – 400'],
+					['До 260', '260 – 380', '380 – 475'],
+					['До 300', '300 – 420', '420 – 530']
+
+				];
+			}
+				
+
+
+				wheelArr = document.querySelector('#wheelDiameter').options;
+				airFlowArr = document.querySelector('#wheelDiameter')
+
+				console.log(wheelArr);
+
+
+		function getEl(s, g) {
+			var cE; 
+			if(g){
+				cE = document.querySelectorAll(s); 
+				return cE;
+			}else{
+				el = document.querySelector(s);
+				return el;
+			}
+		}
+
+			
+		})(jQuery);
+
+
+	</script>
+
+
+
+</body>
+
+</html>
+
+<!-- 
+var calc = document.querySelector('#makeCalculations'),
+					calcScreen = document.querySelector('.calc__output-screen span'),
+					calcErrorCashError = document.querySelector('.cash-registers'),
+					calcErrorStaffError = document.querySelector('.number-staff'),
+					calcErrorPaymentError = document.querySelector('.number-payment'),
+					calcValue = 0;
+
+
+			calc.addEventListener('click', makeCalculations, false);
+
+			function makeCalculations(){
+
+				var cashRegistersVal =  getElementVal('#cashRegisters'),
+					numberStaffVal = getElementVal('#numberStaff'),
+					numberPaymentVal = getElementVal('#numberPayment'),
+					legalFormVal = getElementVal('#legalForm', 'select'),
+					taxSystemVal = getElementVal('#taxSystem', 'select'),
+					typeActivityVal = getElementVal('#typeActivity', 'select');
+
+					cashRegistersVal = parseFloat(cashRegistersVal);
+					numberStaffVal = parseFloat(numberStaffVal);
+					numberPaymentVal = parseFloat(numberPaymentVal);
+
+				if(isNumeric(cashRegistersVal) && isNumeric(numberStaffVal) && isNumeric(numberPaymentVal)) {
+
+					removeError(calcErrorStaffError);
+					removeError(calcErrorCashError);
+					removeError(calcErrorPaymentError);
+
+					if(numberPaymentVal === 0){
+						numberPaymentVal = (legalFormVal === 'lf1') ? 0 : (legalFormVal === 'lf2' && (taxSystemVal === 'ts1' || taxSystemVal === 'ts2')) ? 10 : (legalFormVal === 'lf2' && (taxSystemVal === 'ts3' || taxSystemVal === 'ts4')) ? 20 : 0;
+						
+						if(legalFormVal === 'lf2') {
+							document.querySelector('#numberPayment').value = numberPaymentVal;
+						}
+						
+					}
+
+					if(legalFormVal === 'lf2' && numberStaffVal === 0){
+						showError(calcErrorStaffError, 'В ООО не может не быть сотрудников.');
+						return false;
+					}		
+
+					if(cashRegistersVal < 0){
+						showError(calcErrorCashError, 'Количество кассовых аппаратов не может быть отрицательным');
+						return false;
+					}
+
+					if(numberStaffVal < 0){
+						showError(calcErrorStaffError, 'Количество сотрудников не может быть отрицательным');
+						return false;
+					}
+
+					if(numberPaymentVal < 0){
+						showError(calcErrorPaymentError, 'Количество платежных поручений не может быть отрицательным');
+						return false;
+					}				
+
+					if(legalFormVal === 'lf1' &&  (taxSystemVal === 'ts1' || taxSystemVal === 'ts4')){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 50;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}	
+
+					if(legalFormVal === 'lf1' && taxSystemVal === 'ts2' ){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75 * 3;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+					if(legalFormVal === 'lf1' && taxSystemVal === 'ts3' ){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 100 * 3;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts1'){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts2'){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75 * 3;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts3'){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 100 * 3;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts4'){
+						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75;
+						calcScreen.innerHTML = calcValue + ' руб.';
+					}
+
+				}
+
+			}
+
+			function getElementVal(selector, tag) {
+
+				var el = document.querySelector(selector),
+					n = 0,
+					val = '';
+
+				tag = tag || null;
+
+				if(tag === 'select') {
+					n = el.options.selectedIndex;
+					val = el.options[n].value;
+				}
+
+				val = el.value;
+
+				return val;
+
+			}
+
+			function isNumeric(n) {
+  				return !isNaN(parseFloat(n)) && isFinite(n);
+			}
+
+			function removeError(container){
+				if(container.querySelector('.error-message')){
+					var el = container.querySelector('.error-message');
+					container.removeChild(el);
+				}
+			}
+
+			function showError(container, errorMsg){
+
+	    		var msgElem = document.createElement('div');
+
+	    		msgElem.className = "error-message";
+	    		msgElem.innerHTML = errorMsg;
+	    		container.appendChild(msgElem);
+
+			};
+ -->

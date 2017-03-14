@@ -1,0 +1,98 @@
+/* custom style */
+.calc {
+    max-width: 515px;
+    margin: 40px auto;    
+}
+
+.calc form>div {
+        margin-bottom: 20px;
+        position: relative;
+        
+}
+
+.calc label {
+        display: inline-block;
+        width: 300px;
+}
+.calc select, 
+.calc input {
+        
+        width: 210px;
+        height: 37px; 
+        padding: 0 10px;
+        box-sizing: border-box;    
+        display: inline-block;
+        
+}
+.calc input {
+        margin-left: 5px;
+}
+.calc__output-screen {
+        box-sizing: border-box;
+        
+        height: 50px;
+        line-height: 50px;
+        font-size: 28px;
+        background-color: #f7f7f7;
+        width: 100%;
+        padding: 0 20px;
+        -webkit-box-shadow: 0 0 3px 0 #575757;
+        box-shadow: 0 0 3px 0 #575757;
+        margin: 30px 0 20px 0;
+        position: relative;
+}
+
+.calc__output-screen span { 
+        color: #adba5d; 
+}
+
+.btn-calc {
+
+    background-color: gray;
+    color: blue;  
+    width: 200px;
+    text-align: center;   
+    cursor: pointer;  
+        
+    background-color: #b1bd61;
+    color: #ffffff;
+    background-image: -webkit-linear-gradient(top, #bbc46a, #abb95b);
+    background-image: linear-gradient(to bottom, #bbc46a, #abb95b);
+    border-color: transparent;
+    
+    height: 35px;
+    line-height: 35px;
+    margin: 20px auto;
+    
+}
+.error-message {
+        position: absolute;
+        bottom: -15px;
+        right: 0;
+        font-size: 12px;
+        color: red;
+}
+.calc__note {
+        font-size: 12px;
+}
+.calc__note span {
+        font-weight: bold;
+}
+.legal-form {  }
+.tax-system {  }
+.type-activity {  }
+.cash-registers {  }
+.number-staff {  }
+.number-payment {  }
+
+.cf:after {
+        visibility: hidden;
+        display: block;
+        content: "";
+        clear: both;
+        height: 0;
+        }
+* html .cf             { zoom: 1; } /* IE6 */
+*:first-child+html .cf { zoom: 1; } /* IE7 */
+
+
