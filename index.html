@@ -35,7 +35,7 @@
 	
 	<form action="" class="calc__form" id="calcForm">
 		
-		<div class="legal-form">
+		<div>
 			<label for="">Диаметр колеса, мм:</label> 	
 			<select id="wheelDiameter" name="">
 				<option selected value="800">800</option>
@@ -48,40 +48,38 @@
 	  			<option value="2800">2800</option>
 	  			<option value="5000">5000</option>	
 			</select>
-    	</div><!-- /legal-form -->
+    	</div>
    		
-   		<div class="type-activity">
-   			<label for="">Расход воздуха, м<sup>3</sup>/c:</label> 	
+   		<div class="air-flow">
+   			<label for="airFlow">Расход воздуха, м<sup>3</sup>/c:</label> 	
    			<input id="airFlow" type="text" disabled="true" value="До 6">
-		</div><!-- /tax-system -->
+		</div>
 
-		<div class="type-activity">
-			<label for="">Напор:</label>
+		<div>
+			<label for="pressure">Напор:</label>
 			<select id="pressure">
 	  			<option value="0">До 350</option>
                 <option value="1">350 – 400</option>  
 			</select>
-		</div><!-- /type-activity -->
+		</div>
 
         <div class="type-activity">
             <label for="">Климатическое исполнение:</label>
             <select id="climaticVer">
                 <option value="1">У1</option>
-                <option value="1,05">УХЛ1</option>  
-                <option value="1,1">ХЛ1</option>  
+                <option value="1.05">УХЛ1</option>  
+                <option value="1.1">ХЛ1</option>  
             </select>
-        </div><!-- /type-activity -->
+        </div>
 
 
 		<div class="air-size">
 			<label for="">Типоразмер вентилятора:</label>
-            <div>BO-800/4-AL-Y1</div>
-		</div><!-- /cash-registers -->
+            <div>ВО-800/4-AL-У1</div>
+		</div>
 
-		<div class="calc__output-screen">Стоимость услуг: <span></span></div><!-- /output-screen -->
+		<div class="calc__output-screen">Стоимость: <span>23 100 р.</span></div><!-- /output-screen -->
 		<div class="calc__note"><span>Примечание:</span> данный расчет приблизительный и не учитывает индивидуальные особенности, например наличие экспорта, ВЭД, иностранного капитала и т.д. Для более детального расчета <a href="#" title="">оставьте заявку</a> и мы с Вами свяжемся.</div>
-
-		<div id="makeCalculations" class="btn-calc">Произвести расчет</div>
 
 	</form>
 
@@ -93,335 +91,10 @@
 
 	<script src="pub/js/jquery-1.11.2.min.js"></script>
 	<script src="pub/js/jquery-migrate-1.2.1.min.js"></script>
-	
-	<script>
-		
-		'use strict';
-		
-		(function($, undefined){ 
-
-			var optAC = { // опции вентилятора
-				
-				wheel : {
-
-                    select : getEl('#wheelDiameter', false),
-                    options : getEl('#wheelDiameter').options, // все диаметры
-                    diameter : 0,
-                    index : 0
-
-                },
     
-				flow : [ 'До 6', 'До 7', 'До 23', 'До 25', 'До 45', 'До 50', 'До 60', 'До 70', 'До 200' ], // расход
-
-				pressure : [ // напор
-
-					['До 350', '350 – 400'],
-					['До 300', '300 – 350'],
-					['До 300', '300 – 450', '450 – 530'],
-					['До 190', '190 – 260', '260 – 310'],
-					['До 250', '250 – 340', '340 – 420'],
-					['До 280', '280 – 400', '400 – 500'],
-					['До 230', '230 – 320', '320 – 400'],
-					['До 260', '260 – 380', '380 – 475'],
-					['До 300', '300 – 420', '420 – 530']
-
-				],
-
-                blades : [
-
-                    ['4', '6'],
-                    ['4', '6'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8'],
-                    ['4', '6', '8']
-
-                ],   
-
-                cost : [
-
-                    ['23100', '28000'],
-                    ['26500', '31000'],
-                    ['46200', '58800', '64000'],
-                    ['54600', '69300', '75000'],
-                    ['58800', '74600', '87000'],
-                    ['60900', '76600', '94500'],
-                    ['75600', '95500', '123900'],
-                    ['78800', '98700', '128100'],
-                    ['180000', '210000', '245000']
-
-                ],
-
-                size : {
-
-                    const1: 'ВО',
-                    wheelD: '800',
-                    numB: '4',
-                    const2: 'AL',
-                    climatic: 'У1',
-
-                },
-
-                climaticFactor : 1,
-
-			},
-
-            airFlowInput = getEl('#airFlow', false),
-            pressure = getEl('#pressure', false),
-            marking,
-            climaticVer = getEl('#climaticVer', false),
-            airSize = getEl('.air-size div', false);
-
-            optAC.wheel.select.addEventListener('change', generatePressure, false);
-            pressure.addEventListener('change', generateBlades, false);
-            climaticVer.addEventListener('change', generateClimatic, false);
-
-            function generatePressure(){
-                
-                var pressure = getEl('#pressure', false);
-
-                for (var i = 0; i < optAC.wheel.options.length; i++){
-
-                    if(optAC.wheel.options[i].selected){
-                        optAC.wheel.diameter = optAC.wheel.options[i].value;
-                        optAC.size.wheelD = optAC.wheel.diameter;
-                        optAC.wheel.index = optAC.wheel.options[i].index;
-                    }
-
-                }
-                
-                pressure.options[0].selected = true;
-                generateBlades();
-
-                airSize.innerHTML = formationSize();
-
-                airFlowInput.value = optAC.flow[optAC.wheel.index];
-                clearCollection(pressure);
-
-                creatNewCollection(pressure, optAC.wheel.index);
-
-            }
-        
-            function generateClimatic(){
-
-                for (var i = 0; i < climaticVer.options.length; i++){
-
-                    if(climaticVer.options[i].selected){
-                       optAC.size.climatic = climaticVer.options[i].text;
-                    }
-
-                }
-
-                airSize.innerHTML = formationSize();
-
-            }
-
-            function generateBlades(){
-                
-                var pressure = getEl('#pressure', false),
-                    blades = getEl('#numBlades', false),
-                    idx;
-
-                for (var i = 0; i < pressure.options.length; i++){
-
-                    if(pressure.options[i].selected){
-                        idx = pressure.options[i].index;
-                    }
-
-                }
-
-                optAC.size.numB = optAC.blades[optAC.wheel.index][idx]
-                airSize.innerHTML = formationSize();
-               
-            }
-
-    		function getEl(s, g) {
-    			var cE, el; 
-    			if(g){
-    				cE = document.querySelectorAll(s); 
-    				return cE;
-    			}else{
-    				el = document.querySelector(s);
-    				return el;
-    			}
-    		}
-
-            function clearCollection(sel){
-
-                var opts = sel.options;
-
-                while(opts.length > 0){
-
-                    opts[opts.length-1] = null;
-
-                }
-            }
-            
-            function creatNewCollection(sel, idx){
-
-                for(var i = 0; i < optAC.pressure[idx].length; i++){
-
-                  sel.options[i] = new Option(optAC.pressure[idx][i], i);
-
-                }
-
-                sel.options[0].selected = true;
-            }
-
-            function formationSize(){
-               return marking = optAC.size.const1 + '-' + optAC.size.wheelD + '\/' + optAC.size.numB + '-' + optAC.size.climatic;
-            }
-	
-
-        })(jQuery);
-
-
-	</script>
-
+    <script src="pub/js/calc.js"></script>
 
 
 </body>
 
 </html>
-
-<!-- 
-var calc = document.querySelector('#makeCalculations'),
-					calcScreen = document.querySelector('.calc__output-screen span'),
-					calcErrorCashError = document.querySelector('.cash-registers'),
-					calcErrorStaffError = document.querySelector('.number-staff'),
-					calcErrorPaymentError = document.querySelector('.number-payment'),
-					calcValue = 0;
-
-
-			calc.addEventListener('click', makeCalculations, false);
-
-			function makeCalculations(){
-
-				var cashRegistersVal =  getElementVal('#cashRegisters'),
-					numberStaffVal = getElementVal('#numberStaff'),
-					numberPaymentVal = getElementVal('#numberPayment'),
-					legalFormVal = getElementVal('#legalForm', 'select'),
-					taxSystemVal = getElementVal('#taxSystem', 'select'),
-					typeActivityVal = getElementVal('#typeActivity', 'select');
-
-					cashRegistersVal = parseFloat(cashRegistersVal);
-					numberStaffVal = parseFloat(numberStaffVal);
-					numberPaymentVal = parseFloat(numberPaymentVal);
-
-				if(isNumeric(cashRegistersVal) && isNumeric(numberStaffVal) && isNumeric(numberPaymentVal)) {
-
-					removeError(calcErrorStaffError);
-					removeError(calcErrorCashError);
-					removeError(calcErrorPaymentError);
-
-					if(numberPaymentVal === 0){
-						numberPaymentVal = (legalFormVal === 'lf1') ? 0 : (legalFormVal === 'lf2' && (taxSystemVal === 'ts1' || taxSystemVal === 'ts2')) ? 10 : (legalFormVal === 'lf2' && (taxSystemVal === 'ts3' || taxSystemVal === 'ts4')) ? 20 : 0;
-						
-						if(legalFormVal === 'lf2') {
-							document.querySelector('#numberPayment').value = numberPaymentVal;
-						}
-						
-					}
-
-					if(legalFormVal === 'lf2' && numberStaffVal === 0){
-						showError(calcErrorStaffError, 'В ООО не может не быть сотрудников.');
-						return false;
-					}		
-
-					if(cashRegistersVal < 0){
-						showError(calcErrorCashError, 'Количество кассовых аппаратов не может быть отрицательным');
-						return false;
-					}
-
-					if(numberStaffVal < 0){
-						showError(calcErrorStaffError, 'Количество сотрудников не может быть отрицательным');
-						return false;
-					}
-
-					if(numberPaymentVal < 0){
-						showError(calcErrorPaymentError, 'Количество платежных поручений не может быть отрицательным');
-						return false;
-					}				
-
-					if(legalFormVal === 'lf1' &&  (taxSystemVal === 'ts1' || taxSystemVal === 'ts4')){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 50;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}	
-
-					if(legalFormVal === 'lf1' && taxSystemVal === 'ts2' ){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75 * 3;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-					if(legalFormVal === 'lf1' && taxSystemVal === 'ts3' ){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 100 * 3;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts1'){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts2'){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75 * 3;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts3'){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 100 * 3;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-					if(legalFormVal === 'lf2' &&  taxSystemVal === 'ts4'){
-						calcValue = cashRegistersVal * 2000 + numberStaffVal * 700 + numberPaymentVal * 75;
-						calcScreen.innerHTML = calcValue + ' руб.';
-					}
-
-				}
-
-			}
-
-			function getElementVal(selector, tag) {
-
-				var el = document.querySelector(selector),
-					n = 0,
-					val = '';
-
-				tag = tag || null;
-
-				if(tag === 'select') {
-					n = el.options.selectedIndex;
-					val = el.options[n].value;
-				}
-
-				val = el.value;
-
-				return val;
-
-			}
-
-			function isNumeric(n) {
-  				return !isNaN(parseFloat(n)) && isFinite(n);
-			}
-
-			function removeError(container){
-				if(container.querySelector('.error-message')){
-					var el = container.querySelector('.error-message');
-					container.removeChild(el);
-				}
-			}
-
-			function showError(container, errorMsg){
-
-	    		var msgElem = document.createElement('div');
-
-	    		msgElem.className = "error-message";
-	    		msgElem.innerHTML = errorMsg;
-	    		container.appendChild(msgElem);
-
-			};
- -->
